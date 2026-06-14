@@ -217,8 +217,18 @@
     </div>
 
     <div class="card">
-        <div class="card-title">📜 Previously Asked Questions</div>
-        <div id="previousQuestions"></div>
+        <div class="card-header-row">
+            <div class="card-title">
+                📜 Previously Asked Questions
+                <span id="previousQuestionsCount" class="problems-count"></span>
+            </div>
+            <button id="togglePreviousQuestionsBtn" class="btn-secondary collapse-toggle" type="button">
+                ▶ Show
+            </button>
+        </div>
+        <div id="previousQuestionsPanel" class="collapse-panel" hidden>
+            <div id="previousQuestions"></div>
+        </div>
     </div>
 
     <!-- Backup -->
@@ -917,6 +927,11 @@ correctAnswer must exactly match one of the options strings.
     async function renderPreviousQuestions() {
         const questions = await getAllQuizQuestions();
         const container = document.getElementById("previousQuestions");
+        const countEl = document.getElementById("previousQuestionsCount");
+
+        countEl.textContent = questions.length
+            ? `(${questions.length})`
+            : '';
 
         if (!questions.length) {
             container.innerHTML = "<div class='empty'>No questions yet</div>";
@@ -950,6 +965,15 @@ correctAnswer must exactly match one of the options strings.
     document.getElementById("toggleProblemsBtn").onclick = () => {
         const panel = document.getElementById("problemsPanel");
         const toggleBtn = document.getElementById("toggleProblemsBtn");
+        const isHidden = panel.hidden;
+
+        panel.hidden = !isHidden;
+        toggleBtn.textContent = isHidden ? "▼ Hide" : "▶ Show";
+    };
+
+    document.getElementById("togglePreviousQuestionsBtn").onclick = () => {
+        const panel = document.getElementById("previousQuestionsPanel");
+        const toggleBtn = document.getElementById("togglePreviousQuestionsBtn");
         const isHidden = panel.hidden;
 
         panel.hidden = !isHidden;
