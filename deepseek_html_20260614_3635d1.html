@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>DSA Tracker - Fixed</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0e17;
+            color: #e5e9f0;
+            padding: 16px;
+            padding-bottom: 80px;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .card {
+            background: #1e1b2e;
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #2d2b42;
+        }
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            background: #0f0e17;
+            border: 1px solid #3b3a5c;
+            border-radius: 16px;
+            color: #e5e9f0;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+        button {
+            background: #7c3aed;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        .btn-danger {
+            background: #be123c;
+        }
+        .btn-secondary {
+            background: #2d2b42;
+        }
+        .problem-item {
+            background: #15132a;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid #7c3aed;
+        }
+        .problem-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .problem-meta {
+            font-size: 0.75rem;
+            color: #a8adc7;
+            margin-bottom: 12px;
+        }
+        .media-preview {
+            background: #0f0e17;
+            padding: 12px;
+            border-radius: 16px;
+            margin: 12px 0;
+        }
+        audio {
+            width: 100%;
+            margin-top: 8px;
+        }
+        img.thumbnail {
+            max-height: 80px;
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #a8adc7;
+        }
+        .recording {
+            background: #be123c;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+        .delete-btn {
+            background: #be123c;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            margin-top: 8px;
+        }
+        .quiz-result {
+            margin-top: 12px;
+            font-weight: 600;
+        }
+        .quiz-result.correct {
+            color: #4ade80;
+        }
+        .quiz-result.wrong {
+            color: #f87171;
+        }
+        .quiz-option-btn.selected-correct {
+            background: #15803d;
+        }
+        .quiz-option-btn.selected-wrong {
+            background: #be123c;
+        }
+        .quiz-option-btn:disabled {
+            opacity: 0.85;
+            cursor: default;
+        }
+        .card-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .card-header-row .card-title {
+            margin-bottom: 0;
+        }
+        .collapse-toggle {
+            flex-shrink: 0;
+            margin-bottom: 0;
+        }
+        .collapse-panel {
+            margin-top: 16px;
+        }
+        .problems-count {
+            font-size: 0.85rem;
+            color: #a8adc7;
+            font-weight: 400;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 style="margin-bottom: 20px;">📘 DSA Memory Vault</h1>
+
+    <!-- Add Problem Form -->
+    <div class="card">
+        <div class="card-title">➕ Add Problem</div>
+        <input type="text" id="problemTitle" placeholder="Problem name" autocomplete="off">
+        <select id="problemPattern">
+            <option value="Sliding Window">Sliding Window</option>
+            <option value="Two Pointers">Two Pointers</option>
+            <option value="Dynamic Programming">Dynamic Programming</option>
+            <option value="Binary Search">Binary Search</option>
+            <option value="Graphs">Graphs</option>
+            <option value="Trees">Trees</option>
+            <option value="Arrays & Hashing">Arrays & Hashing</option>
+        </select>
+        
+        <button id="takePhotoBtn">📸 Take Photo</button>
+        <button id="recordVoiceBtn">🎙️ Record Voice</button>
+        
+        <div id="mediaPreview" class="media-preview" style="display: none;"></div>
+        
+        <button id="saveBtn" style="width: 100%; margin-top: 8px;">💾 Save Problem</button>
+    </div>
+
+    <!-- Problems List -->
+    <div class="card">
+        <div class="card-header-row">
+            <div class="card-title">
+                📚 My Problems
+                <span id="problemsCount" class="problems-count"></span>
+            </div>
+            <button id="toggleProblemsBtn" class="btn-secondary collapse-toggle" type="button">
+                ▶ Show
+            </button>
+        </div>
+        <div id="problemsPanel" class="collapse-panel" hidden>
+            <div id="problemsList">
+                <div class="empty">No problems yet. Add one above.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">🧠 Gemini Topic Quiz</div>
+
+        <input
+            type="text"
+            id="geminiApiKey"
+            placeholder="Gemini API Key"
+        >
+
+        <button id="generateQuizBtn">
+            🎲 Generate Random Question
+        </button>
+
+        <div id="quizContainer" style="margin-top:16px;"></div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">📜 Previously Asked Questions</div>
+        <div id="previousQuestions"></div>
+    </div>
+
+    <!-- Backup -->
+    <div class="card">
+        <button id="exportBtn" class="btn-secondary">💾 Export Backup</button>
+        <button id="restoreBtn" class="btn-secondary">📂 Restore Backup</button>
+        <button id="clearAllBtn" class="btn-danger">⚠️ Clear All</button>
+    </div>
+</div>
+
+<script>
+    // ========== SIMPLE INDEXEDDB ==========
+    const DB_NAME = 'DSASimple';
+    const STORE_NAME = 'problems';
+    const QUIZ_STORE = 'quizQuestions';
+    let db = null;
+    
+    // Pending media
+    let pendingPhoto = null;
+    let pendingAudio = null;
+    let isRecording = false;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    
+    // Initialize database
+    function initDB() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(DB_NAME, 2);
+            request.onerror = () => reject(request.error);
+            request.onsuccess = () => {
+                db = request.result;
+                resolve();
+            };
+            request.onupgradeneeded = (event) => {
+                const dbRef = event.target.result;
+                if (!dbRef.objectStoreNames.contains(STORE_NAME)) {
+                    dbRef.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+                }
+                if (!dbRef.objectStoreNames.contains(QUIZ_STORE)) {
+                    dbRef.createObjectStore(QUIZ_STORE, {
+                        keyPath: 'id',
+                        autoIncrement: true
+                    });
+                }
+            };
+        });
+    }
+    
+    // Get all problems
+    function getAllProblems() {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_NAME, 'readonly');
+            const store = tx.objectStore(STORE_NAME);
+            const request = store.getAll();
+            request.onsuccess = () => resolve(request.result || []);
+            request.onerror = () => reject(request.error);
+        });
+    }
+    
+    // Save problem
+    function saveProblem(problem) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_NAME, 'readwrite');
+            const store = tx.objectStore(STORE_NAME);
+            const request = store.put(problem);
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    }
+    
+    // Delete problem
+    function deleteProblem(id) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_NAME, 'readwrite');
+            const store = tx.objectStore(STORE_NAME);
+            const request = store.delete(id);
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    }
+    
+    function saveQuizQuestion(question) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(QUIZ_STORE, 'readwrite');
+            const store = tx.objectStore(QUIZ_STORE);
+
+            const req = store.put(question);
+
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+    }
+
+    function getAllQuizQuestions() {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(QUIZ_STORE, 'readonly');
+            const store = tx.objectStore(QUIZ_STORE);
+
+            const req = store.getAll();
+
+            req.onsuccess = () => resolve(req.result || []);
+            req.onerror = () => reject(req.error);
+        });
+    }
+
+    // Clear all
+    function clearAllProblems() {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_NAME, 'readwrite');
+            const store = tx.objectStore(STORE_NAME);
+            const request = store.clear();
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    }
+    
+    // ========== PHOTO HANDLING ==========
+    document.getElementById('takePhotoBtn').onclick = () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.capture = 'environment';
+        input.onchange = (e) => {
+            if (e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    pendingPhoto = ev.target.result;
+                    const preview = document.getElementById('mediaPreview');
+                    preview.style.display = 'block';
+                    preview.innerHTML = `📷 Photo ready<br><img src="${pendingPhoto}" class="thumbnail">`;
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        };
+        input.click();
+    };
+    
+    // ========== VOICE RECORDING - SIMPLIFIED FOR MOBILE ==========
+    async function startRecording() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            
+            // Try different MIME types for mobile Chrome
+            let mimeType = '';
+            if (MediaRecorder.isTypeSupported('audio/webm')) {
+                mimeType = 'audio/webm';
+            } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+                mimeType = 'audio/mp4';
+            } else {
+                mimeType = '';
+            }
+            
+            mediaRecorder = new MediaRecorder(stream, { mimeType });
+            audioChunks = [];
+            
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    audioChunks.push(event.data);
+                }
+            };
+            
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: mimeType || 'audio/webm' });
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    pendingAudio = reader.result;
+                    const preview = document.getElementById('mediaPreview');
+                    preview.style.display = 'block';
+                    preview.innerHTML = `🎙️ Voice note recorded<br><audio controls src="${pendingAudio}"></audio>`;
+                };
+                reader.readAsDataURL(audioBlob);
+                
+                stream.getTracks().forEach(track => track.stop());
+                isRecording = false;
+                const recordBtn = document.getElementById('recordVoiceBtn');
+                recordBtn.innerHTML = '🎙️ Record Voice';
+                recordBtn.classList.remove('recording');
+            };
+            
+            mediaRecorder.start();
+            isRecording = true;
+            const recordBtn = document.getElementById('recordVoiceBtn');
+            recordBtn.innerHTML = '⏹️ Stop Recording';
+            recordBtn.classList.add('recording');
+            
+            // Auto stop after 30 seconds
+            setTimeout(() => {
+                if (mediaRecorder && mediaRecorder.state === 'recording') {
+                    mediaRecorder.stop();
+                }
+            }, 30000);
+            
+        } catch (err) {
+            console.error('Mic error:', err);
+            alert('❌ Microphone access denied.\n\nOn Chrome:\n1. Tap the lock icon in address bar\n2. Allow microphone access\n3. Reload this page');
+        }
+    }
+    
+    document.getElementById('recordVoiceBtn').onclick = () => {
+        if (isRecording) {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+            }
+        } else {
+            startRecording();
+        }
+    };
+    
+    // ========== SAVE PROBLEM ==========
+    document.getElementById('saveBtn').onclick = async () => {
+        const title = document.getElementById('problemTitle').value.trim();
+        if (!title) {
+            alert('Please enter a problem title');
+            return;
+        }
+        
+        const problem = {
+            title: title,
+            pattern: document.getElementById('problemPattern').value,
+            createdAt: Date.now(),
+            lastRevised: Date.now(),
+            photo: pendingPhoto || null,
+            audio: pendingAudio || null
+        };
+        
+        await saveProblem(problem);
+        
+        // Reset form
+        document.getElementById('problemTitle').value = '';
+        pendingPhoto = null;
+        pendingAudio = null;
+        document.getElementById('mediaPreview').style.display = 'none';
+        document.getElementById('mediaPreview').innerHTML = '';
+        
+        await renderProblems();
+        alert('✅ Problem saved!');
+    };
+    
+    // ========== RENDER PROBLEMS ==========
+    async function renderProblems() {
+        const problems = await getAllProblems();
+        const container = document.getElementById('problemsList');
+        const countEl = document.getElementById('problemsCount');
+
+        countEl.textContent = problems.length
+            ? `(${problems.length})`
+            : '';
+
+        if (problems.length === 0) {
+            container.innerHTML = '<div class="empty">No problems yet. Add one above.</div>';
+            return;
+        }
+        
+        container.innerHTML = problems.map(problem => `
+            <div class="problem-item" data-id="${problem.id}">
+                <div class="problem-title">🔖 ${escapeHtml(problem.title)}</div>
+                <div class="problem-meta">
+                    <span>📐 ${problem.pattern}</span>
+                    <span>📅 ${new Date(problem.lastRevised || problem.createdAt).toLocaleDateString()}</span>
+                </div>
+                ${problem.photo ? `<div><button class="btn-secondary" onclick="viewPhoto(${problem.id})">📸 View Photo</button></div>` : ''}
+                ${problem.audio ? `<div><button class="btn-secondary" onclick="playAudio(${problem.id})">🎧 Play Voice Note</button></div>` : ''}
+                <button class="delete-btn" onclick="deleteProblemById(${problem.id})">🗑️ Delete</button>
+            </div>
+        `).join('');
+    }
+    
+    // Global functions for buttons
+    window.viewPhoto = async (id) => {
+        const problems = await getAllProblems();
+        const problem = problems.find(p => p.id === id);
+        if (problem && problem.photo) {
+            const win = window.open();
+            win.document.write(`<img src="${problem.photo}" style="max-width:100%; margin:20px; border-radius:12px;">`);
+        }
+    };
+    
+    window.playAudio = async (id) => {
+        const problems = await getAllProblems();
+        const problem = problems.find(p => p.id === id);
+        if (problem && problem.audio) {
+            const audio = new Audio(problem.audio);
+            audio.play().catch(e => alert('Could not play audio: ' + e.message));
+        }
+    };
+    
+    window.deleteProblemById = async (id) => {
+        if (confirm('Delete this problem permanently?')) {
+            await deleteProblem(id);
+            await renderProblems();
+            alert('✅ Problem deleted');
+        }
+    };
+    
+    // ========== BACKUP ==========
+    document.getElementById('exportBtn').onclick = async () => {
+        const problems = await getAllProblems();
+        const data = JSON.stringify(problems, null, 2);
+        const blob = new Blob([data], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `dsa_backup_${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        alert('✅ Backup exported!');
+    };
+    
+    document.getElementById('restoreBtn').onclick = () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'application/json';
+        input.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const text = await file.text();
+            const problems = JSON.parse(text);
+            await clearAllProblems();
+            for (let prob of problems) {
+                const { id, ...cleanProb } = prob;
+                await saveProblem(cleanProb);
+            }
+            await renderProblems();
+            alert('✅ Backup restored!');
+        };
+        input.click();
+    };
+    
+    document.getElementById('clearAllBtn').onclick = async () => {
+        if (confirm('⚠️ DELETE ALL PROBLEMS? This cannot be undone.')) {
+            await clearAllProblems();
+            await renderProblems();
+            alert('All data cleared.');
+        }
+    };
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function escapeAttr(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/</g, '&lt;');
+    }
+
+    function extractOptionLetter(str) {
+        const trimmed = String(str).trim();
+        const prefixMatch = trimmed.match(/^([A-Da-d])[.\):]\s*/);
+        if (prefixMatch) {
+            return prefixMatch[1].toUpperCase();
+        }
+        if (/^[A-Da-d]$/.test(trimmed)) {
+            return trimmed.toUpperCase();
+        }
+        return null;
+    }
+
+    function normalizeAnswer(str) {
+        return String(str).trim().toLowerCase();
+    }
+
+    function getMatchingOption(correct, options) {
+        if (!Array.isArray(options)) {
+            return null;
+        }
+
+        const correctLetter = extractOptionLetter(correct);
+
+        return options.find(option => {
+            if (normalizeAnswer(option) === normalizeAnswer(correct)) {
+                return true;
+            }
+            const optionLetter = extractOptionLetter(option);
+            return correctLetter && optionLetter === correctLetter;
+        }) || null;
+    }
+
+    function isAnswerCorrect(selected, correct, options) {
+        if (normalizeAnswer(selected) === normalizeAnswer(correct)) {
+            return true;
+        }
+
+        const selectedLetter = extractOptionLetter(selected);
+        const correctLetter = extractOptionLetter(correct);
+
+        if (selectedLetter && correctLetter && selectedLetter === correctLetter) {
+            return true;
+        }
+
+        const matchingOption = getMatchingOption(correct, options);
+        if (matchingOption) {
+            if (normalizeAnswer(selected) === normalizeAnswer(matchingOption)) {
+                return true;
+            }
+            const matchingLetter = extractOptionLetter(matchingOption);
+            if (selectedLetter && matchingLetter && selectedLetter === matchingLetter) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    function getCorrectOptionLabel(correct, options) {
+        const matchingOption = getMatchingOption(correct, options);
+        return matchingOption || correct;
+    }
+
+    function renderQuizOptionsHtml(quiz, options) {
+        const persistAnswer = options && options.persistAnswer;
+        const answered = persistAnswer ? quiz.userAnswer : null;
+        const isCorrect = isAnswerCorrect(answered, quiz.correctAnswer, quiz.options);
+
+        return quiz.options.map(option => {
+            let className = 'quiz-option-btn';
+            if (answered && option === answered) {
+                className += isCorrect ? ' selected-correct' : ' selected-wrong';
+            }
+
+            return `
+                <button
+                    class="${className}"
+                    data-quiz-id="${quiz.id}"
+                    data-option="${escapeAttr(option)}"
+                    data-correct="${escapeAttr(quiz.correctAnswer)}"
+                    ${answered ? 'disabled' : ''}
+                >
+                    ${escapeHtml(option)}
+                </button>
+            `;
+        }).join('');
+    }
+
+    function renderQuizResultHtml(quiz, options) {
+        const persistAnswer = options && options.persistAnswer;
+        if (!persistAnswer || !quiz.userAnswer) {
+            return '<div class="quiz-result" hidden></div>';
+        }
+
+        const isCorrect = isAnswerCorrect(quiz.userAnswer, quiz.correctAnswer, quiz.options);
+        const correctLabel = getCorrectOptionLabel(quiz.correctAnswer, quiz.options);
+        const message = isCorrect
+            ? '✅ Correct!'
+            : '❌ Wrong. Correct answer: ' + escapeHtml(correctLabel);
+
+        return `<div class="quiz-result ${isCorrect ? 'correct' : 'wrong'}">${message}</div>`;
+    }
+
+    function resetHistoryQuizItem(quizItem) {
+        quizItem.querySelectorAll('.quiz-option-btn').forEach(btn => {
+            btn.disabled = false;
+            btn.classList.remove('selected-correct', 'selected-wrong');
+        });
+
+        const resultEl = quizItem.querySelector('.quiz-result');
+        resultEl.hidden = true;
+        resultEl.textContent = '';
+        resultEl.className = 'quiz-result';
+
+        const tryAgainBtn = quizItem.querySelector('.try-again-btn');
+        if (tryAgainBtn) {
+            tryAgainBtn.remove();
+        }
+    }
+
+    function attachQuizOptionListeners(container) {
+        container.querySelectorAll('.quiz-option-btn:not([disabled])').forEach(btn => {
+            btn.addEventListener('click', () => {
+                handleQuizAnswer(
+                    btn,
+                    btn.dataset.option,
+                    btn.dataset.correct,
+                    Number(btn.dataset.quizId)
+                );
+            });
+        });
+    }
+
+    async function handleQuizAnswer(clickedBtn, selected, correct, quizId) {
+        const questions = await getAllQuizQuestions();
+        const quiz = questions.find(q => q.id === quizId);
+        if (!quiz) {
+            return;
+        }
+
+        const isCorrect = isAnswerCorrect(selected, quiz.correctAnswer, quiz.options);
+        const correctLabel = getCorrectOptionLabel(quiz.correctAnswer, quiz.options);
+        const quizItem = clickedBtn.closest('.quiz-item');
+        const isHistory = Boolean(quizItem.closest('#previousQuestions'));
+
+        quizItem.querySelectorAll('.quiz-option-btn').forEach(btn => {
+            btn.disabled = true;
+            if (btn.dataset.option === selected) {
+                btn.classList.add(isCorrect ? 'selected-correct' : 'selected-wrong');
+            }
+        });
+
+        const resultEl = quizItem.querySelector('.quiz-result');
+        resultEl.hidden = false;
+        resultEl.className = 'quiz-result ' + (isCorrect ? 'correct' : 'wrong');
+        resultEl.textContent = isCorrect
+            ? '✅ Correct!'
+            : '❌ Wrong. Correct answer: ' + correctLabel;
+
+        if (isHistory) {
+            let tryAgainBtn = quizItem.querySelector('.try-again-btn');
+            if (!tryAgainBtn) {
+                tryAgainBtn = document.createElement('button');
+                tryAgainBtn.className = 'btn-secondary try-again-btn';
+                tryAgainBtn.type = 'button';
+                tryAgainBtn.textContent = '↺ Try Again';
+                tryAgainBtn.onclick = () => resetHistoryQuizItem(quizItem);
+                quizItem.appendChild(tryAgainBtn);
+            }
+        }
+    }
+
+    function getRandomTopic() {
+        const topics = [
+            "Sliding Window",
+            "Two Pointers",
+            "Dynamic Programming",
+            "Binary Search",
+            "Graphs",
+            "Trees",
+            "Arrays & Hashing"
+        ];
+
+        return topics[
+            Math.floor(Math.random() * topics.length)
+        ];
+    }
+
+    async function generateGeminiQuestion() {
+        const apiKey =
+            document.getElementById("geminiApiKey").value.trim();
+
+        if (!apiKey) {
+            alert("Please enter Gemini API key");
+            return;
+        }
+
+        const generateBtn = document.getElementById("generateQuizBtn");
+        generateBtn.disabled = true;
+        generateBtn.textContent = "⏳ Generating...";
+
+        try {
+            const problems = await getAllProblems();
+            const topic = getRandomTopic();
+
+            const prompt = `
+You are generating a DSA guessing game.
+
+Topic: ${topic}
+
+Problems:
+${JSON.stringify(problems)}
+
+Generate JSON only:
+
+{
+  "topic":"...",
+  "question":"...",
+  "options":["A","B","C","D"],
+  "correctAnswer":"..."
+}
+
+Question should be about the selected topic.
+Options should be multiple choice.
+correctAnswer must exactly match one of the options strings.
+`;
+
+            const response = await fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        contents: [
+                            {
+                                parts: [
+                                    {
+                                        text: prompt
+                                    }
+                                ]
+                            }
+                        ]
+                    })
+                }
+            );
+
+            let data;
+            try {
+                data = await response.json();
+            } catch (parseErr) {
+                throw new Error(
+                    "Could not read Gemini response (HTTP " + response.status + ")."
+                );
+            }
+
+            if (!response.ok) {
+                const apiMessage = data.error && data.error.message;
+                if (response.status === 503) {
+                    throw new Error(
+                        (apiMessage || "Gemini is temporarily unavailable (503).") +
+                        " Please wait a moment and try again."
+                    );
+                }
+                throw new Error(
+                    apiMessage || ("Gemini request failed (HTTP " + response.status + ").")
+                );
+            }
+
+            const raw =
+                data.candidates &&
+                data.candidates[0] &&
+                data.candidates[0].content &&
+                data.candidates[0].content.parts &&
+                data.candidates[0].content.parts[0] &&
+                data.candidates[0].content.parts[0].text;
+
+            if (!raw) {
+                throw new Error(
+                    "Gemini returned an empty response. Try generating again."
+                );
+            }
+
+            const cleaned = raw
+                .replace(/```json/g, "")
+                .replace(/```/g, "")
+                .trim();
+
+            let quiz;
+            try {
+                quiz = JSON.parse(cleaned);
+            } catch (parseErr) {
+                throw new Error(
+                    "Gemini returned invalid JSON. Try generating again."
+                );
+            }
+
+            if (
+                !quiz.topic ||
+                !quiz.question ||
+                !Array.isArray(quiz.options) ||
+                quiz.options.length === 0 ||
+                !quiz.correctAnswer
+            ) {
+                throw new Error(
+                    "Gemini returned an incomplete quiz. Try generating again."
+                );
+            }
+
+            const savedId = await saveQuizQuestion({
+                ...quiz,
+                createdAt: Date.now()
+            });
+
+            renderQuiz({ ...quiz, id: savedId });
+
+            await renderPreviousQuestions();
+        } catch (err) {
+            alert("❌ " + (err.message || "Failed to generate question."));
+        } finally {
+            generateBtn.disabled = false;
+            generateBtn.textContent = "🎲 Generate Random Question";
+        }
+    }
+
+    function renderQuiz(quiz) {
+        const container = document.getElementById("quizContainer");
+
+        container.innerHTML = `
+            <div class="quiz-item">
+                <h3>${escapeHtml(quiz.topic)}</h3>
+                <p>${escapeHtml(quiz.question)}</p>
+                ${renderQuizOptionsHtml(quiz, { persistAnswer: false })}
+                ${renderQuizResultHtml(quiz, { persistAnswer: false })}
+            </div>
+        `;
+
+        attachQuizOptionListeners(container);
+    }
+
+    async function renderPreviousQuestions() {
+        const questions = await getAllQuizQuestions();
+        const container = document.getElementById("previousQuestions");
+
+        if (!questions.length) {
+            container.innerHTML = "<div class='empty'>No questions yet</div>";
+            return;
+        }
+
+        questions.reverse();
+
+        container.innerHTML = questions.map(q => `
+            <div class="quiz-item problem-item">
+                <div class="problem-title">
+                    ${escapeHtml(q.topic)}
+                </div>
+
+                <div>
+                    ${escapeHtml(q.question)}
+                </div>
+
+                ${renderQuizOptionsHtml(q, { persistAnswer: false })}
+                ${renderQuizResultHtml(q, { persistAnswer: false })}
+            </div>
+        `).join("");
+
+        attachQuizOptionListeners(container);
+    }
+
+    document
+        .getElementById("generateQuizBtn")
+        .onclick = generateGeminiQuestion;
+
+    document.getElementById("toggleProblemsBtn").onclick = () => {
+        const panel = document.getElementById("problemsPanel");
+        const toggleBtn = document.getElementById("toggleProblemsBtn");
+        const isHidden = panel.hidden;
+
+        panel.hidden = !isHidden;
+        toggleBtn.textContent = isHidden ? "▼ Hide" : "▶ Show";
+    };
+    
+    // ========== START APP ==========
+    (async () => {
+        await initDB();
+        await renderProblems();
+        await renderPreviousQuestions();
+    })();
+</script>
+</body>
+</html>
