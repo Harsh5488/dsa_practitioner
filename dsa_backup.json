@@ -1,0 +1,425 @@
+[
+  {
+    "title": "Selection Sort",
+    "pattern": "Sorting",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 1
+  },
+  {
+    "title": "Bubble Sort",
+    "pattern": "Sorting",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 2
+  },
+  {
+    "title": "Insertion Sorting",
+    "pattern": "Sorting",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 3
+  },
+  {
+    "title": "Merge Sorting",
+    "pattern": "Sorting",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 4
+  },
+  {
+    "title": "Recursive Bubble Sort",
+    "pattern": "Sorting",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 5
+  },
+  {
+    "title": "Recursive Insertion Sort",
+    "pattern": "Sorting",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 6
+  },
+  {
+    "title": "Quick Sorting",
+    "pattern": "Sorting",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 7
+  },
+  {
+    "title": "Largest Element",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 8
+  },
+  {
+    "title": "Second Largest Element",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 9
+  },
+  {
+    "title": "Check if the Array is Sorted II",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 10
+  },
+  {
+    "title": "Remove duplicates from Sorted array",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 11
+  },
+  {
+    "title": "Left Rotate Array by One",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 12
+  },
+  {
+    "title": "Left Rotate Array by K Places",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 13
+  },
+  {
+    "title": "Move Zeros to End",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 14
+  },
+  {
+    "title": "Linear Search",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 15
+  },
+  {
+    "title": "Union of two sorted arrays",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 16
+  },
+  {
+    "title": "Find missing number",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 17
+  },
+  {
+    "title": "Maximum Consecutive Ones",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 18
+  },
+  {
+    "title": "Find the number that appears once, and other numbers twice.",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 19
+  },
+  {
+    "title": "Longest subarray with given sum K(positives)",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 20
+  },
+  {
+    "title": "Longest subarray with sum K",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 21
+  },
+  {
+    "title": "Two Sum",
+    "pattern": "Arrays & Hashing",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 22
+  },
+  {
+    "title": "Sort an array of 0's 1's and 2's",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 23
+  },
+  {
+    "title": "Majority Element-I",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 24
+  },
+  {
+    "title": "Kadane's Algorithm",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 25
+  },
+  {
+    "title": "Print subarray with maximum subarray sum",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 26
+  },
+  {
+    "title": "Stock Buy and Sell",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 27
+  },
+  {
+    "title": "Rearrange array elements by sign",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 28
+  },
+  {
+    "title": "Next Permutation",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 29
+  },
+  {
+    "title": "Leaders in an Array",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 30
+  },
+  {
+    "title": "Longest Consecutive Sequence in an Array",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 31
+  },
+  {
+    "title": "Set Matrix Zeroes",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 32
+  },
+  {
+    "title": "Rotate matrix by 90 degrees",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 33
+  },
+  {
+    "title": "Print the matrix in spiral manner",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 34
+  },
+  {
+    "title": "Count subarrays with given sum",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 35
+  },
+  {
+    "title": "Pascal's Triangle I",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 36
+  },
+  {
+    "title": "Majority Element-II",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 37
+  },
+  {
+    "title": "3 Sum",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 38
+  },
+  {
+    "title": "4 Sum",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 39
+  },
+  {
+    "title": "Largest Subarray with Sum 0",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 40
+  },
+  {
+    "title": "Count subarrays with given xor K",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 41
+  },
+  {
+    "title": "Merge Overlapping Subintervals",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 42
+  },
+  {
+    "title": "Merge two sorted arrays without extra space",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 43
+  },
+  {
+    "title": "Find the repeating and missing number",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 44
+  },
+  {
+    "title": "Count Inversions",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 45
+  },
+  {
+    "title": "Reverse Pairs",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 46
+  },
+  {
+    "title": "Maximum Product Subarray in an Array",
+    "pattern": "Arrays",
+    "createdAt": 1781418603920,
+    "lastRevised": 1781418603920,
+    "photo": null,
+    "audio": null,
+    "id": 47
+  }
+]
